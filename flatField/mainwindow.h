@@ -14,6 +14,9 @@
 #include <QtGui>
 #include <QFileInfo>
 #include <QDir>
+#include <QTimer>
+#include <image.h>
+#include <flatfield.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,21 +36,23 @@ public:
     double getPixelDistance(int x,int y);
     void setDiagDist();
     void setVectors();
+    void blur();
+
+    void setProgress(int progress);
 
 private slots:
     void on_selectImages_clicked();
     void on_deleteImages_clicked();
     void on_createFlat_clicked();
-
-    void setProgress(int percent);
-
     void on_applyFlat_clicked();
 
 private:
     Ui::MainWindow *ui;
     QStringList files;
-    QVector<QImage> images;
-    QImage finalImg;
+    QVector<Image> images;
+    FlatField finalImg;
+
+    int imageCount;
 
     int width;
     int height;
@@ -56,9 +61,9 @@ private:
     double yCenter;
     int diagDist;
 
-    int progress100;
     int progress;
-    int totalProgress;
+
+    QTimer *timer;
 
 signals:
     void newProgress(int percent);
